@@ -41,7 +41,7 @@ func (s *Service) Run() {
 	s.echoServer.Use(middleware.BasicAuth(func(username, password string, c echo.Context) (bool, error) {
 		return username == s.authUser && password == s.authPassword, nil
 	}))
-	s.echoServer.GET("/transactions", s.listOrdersPublic)
+	s.echoServer.GET("/transactions", s.listOrders)
 
 	s.httpServer = s.initMetricsAndHealthCheck()
 
@@ -57,7 +57,7 @@ func (s *Service) Run() {
 	}
 }
 
-func (s *Service) listOrdersPublic(ctx echo.Context) error {
+func (s *Service) listOrders(ctx echo.Context) error {
 	req := &grpc.ListOrdersRequest{}
 	err := ctx.Bind(req)
 
