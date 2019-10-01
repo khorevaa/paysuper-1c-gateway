@@ -3,7 +3,7 @@
 [![License: GPL 3.0](https://img.shields.io/badge/License-GPL3.0-green.svg)](https://opensource.org/licenses/Gpl3.0)
 [![Go Report Card](https://goreportcard.com/badge/github.com/paysuper/paysuper-1c-gateway)](https://goreportcard.com/report/github.com/paysuper/paysuper-1c-gateway)
 
-s# Motivation
+# Motivation
 
 1С gateway is a simple REST API proxy to handle transaction log with full set of data import from PaySuper billing 
 server to 1C server. Works as very low load service with only some requests per day.
