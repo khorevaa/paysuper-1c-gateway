@@ -12,6 +12,7 @@ import (
 	"github.com/paysuper/paysuper-billing-server/pkg"
 	"github.com/paysuper/paysuper-billing-server/pkg/proto/grpc"
 	"go.uber.org/zap"
+	"gopkg.in/go-playground/validator.v9"
 	"net/http"
 	"os"
 	"time"
@@ -26,6 +27,7 @@ type Service struct {
 	echoServer   *echo.Echo
 	httpServer   *http.Server
 	billing      grpc.BillingService
+	validator    *validator.Validate
 	httpPort     int
 	metricPort   int
 	authUser     string
@@ -33,7 +35,13 @@ type Service struct {
 }
 
 func NewService(httpPort int, metricPort int, user string, password string) *Service {
-	return &Service{httpPort: httpPort, metricPort: metricPort, authUser: user, authPassword: password}
+	return &Service{
+		httpPort:     httpPort,
+		metricPort:   metricPort,
+		authUser:     user,
+		authPassword: password,
+		validator:    validator.New(),
+	}
 }
 
 func (s *Service) Run() {
@@ -73,7 +81,7 @@ func (s *Service) listOrders(ctx echo.Context) error {
 		req.Offset = OffsetDefault
 	}
 
-	err = ctx.Validate(req)
+	err = s.validator.Struct(req)
 	if err != nil {
 		return echo.NewHTTPError(http.StatusBadRequest, errorRequestParamsIncorrect)
 	}
