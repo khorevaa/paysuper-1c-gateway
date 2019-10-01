@@ -1,0 +1,523 @@
+swagger: "2.0"
+info:
+  title: Protocol One 1C Gateway documentation
+  version: "1.0"
+
+definitions:
+  ProtobufTimestamp:
+    properties:
+      seconds:
+        description: time in unix timestamp
+        type: integer
+      nanos:
+        description: time nano seconds
+        type: integer
+
+  model.Error:
+    properties:
+      message:
+        description: |
+          text error description
+        type: string
+      code:
+        type: string
+        description: error code
+    type: object
+
+  order.project:
+    properties:
+      id:
+        type: string
+        description: project unique identifier
+      merchant_id:
+        type: string
+        description: project merchant unique identifier
+      url_success:
+        type: string
+        description: url for redirect user after successfully completed payment
+      url_fail:
+        type: string
+        description: url for redirect user after failed payment
+      send_notify_email:
+        type: boolean
+        description: flag to send notification emails by "notify_emails" list after successfully completed payment
+      notify_emails:
+        type: array
+        description: emails list to send notification email after successfully completed payment
+        items:
+          type: string
+      secret_key:
+        type: string
+        description: project secret key
+      url_check_account:
+        type: string
+        description: callback url to check payment requisites
+      url_process_payment:
+        type: string
+        description: callback url to send payment complete request
+      callback_protocol:
+        type: string
+        description: "type of callback notification protocol. now available next values: empty - notification request not send, order just mark as successfully complete; default - notification request send by PaySuper notification protocol;"
+
+  order.payment_method.card:
+    properties:
+      first6:
+        type: string
+        description: string representing the first 6 digits of the card. Available only for a card method
+      last4:
+        type: string
+        description: string representing the last 4 digits of the card. Available only for a card method
+      masked:
+        type: string
+        description: masked pan of bank card
+      expiry_month:
+        type: string
+        description: month of expiration bank card
+      expiry_year:
+        type: string
+        description: year of expiration bank card
+      brand:
+        type: string
+        description: bank card brand
+      fingerprint:
+        type: string
+        description: string representing the internal fingerprint for given card
+      secure3d:
+        type: boolean
+        description: true is 3DS secure was used during payment
+
+  order.payment_method.wallet:
+    properties:
+      brand:
+        type: string
+        description: name of payment system
+      account:
+        type: string
+        description: payer wallet number in payment system
+
+  order.payment_method.crypto_currency:
+    properties:
+      brand:
+        type: string
+        description: name of crypto currency system
+      address:
+        type: string
+        description: payer address in crypto cyrrency system
+
+  order.payment_method:
+    properties:
+      title:
+        type: string
+        description: payment method name
+      external_id:
+        type: string
+        description: payment method identifier in payment system
+      payment_system_id:
+        type: string
+        description: payment system identifier
+      saved:
+        type: boolean
+        description: true is payment method was saved by user for future usage
+      card:
+        $ref: '#/definitions/order.payment_method.card'
+        description: object contain main information about requisites if payment was by bank card. may be null
+      wallet:
+        $ref: '#/definitions/order.payment_method.wallet'
+        description: object contain main information about requisites if payment was by e-wallets. may be null
+      crypto_currency:
+        $ref: '#/definitions/order.payment_method.crypto_currency'
+        description: object contain main information about requisites if payment was by crypto currency. may be null
+
+  order.user.address:
+    properties:
+      country:
+        type: string
+        description: string representing the the user's country. two-letter uppercase country code in ISO 3166-1 alpha-2 format
+      city:
+        type: string
+        description: user's city
+      postal_code:
+        type: string
+        description: postal code
+      state:
+        type: string
+        description: state name
+
+  order.user:
+    properties:
+      id:
+        type: string
+        description: customer identity identifier
+      object:
+        type: string
+        description: constant with object name
+      external_id:
+        type: string
+        description: user identifier in project
+      name:
+        type: string
+        description: user name
+      email:
+        type: string
+        description: user email
+      email_verified:
+        type: boolean
+        description: true is email was verified
+      phone:
+        type: string
+        description: user phone
+      phone_verified:
+        type: boolean
+        description: true is phone was verified
+      ip:
+        type: string
+        description: user ip address
+      locale:
+        type: string
+        description: user's locale. two-letter code in lowercase
+      address:
+        $ref: '#/definitions/order.user.address'
+      metadata:
+        type: object
+        description: set of key-value pairs that attached to an object on create order state
+      notify_new_region:
+        type: boolean
+        description: true is user wanting to receiving notification when paysuper will work in user's region
+      notify_new_region_email:
+        type: string
+        description: user's email to send notification email when paysuper starting work in user's region
+
+  order.money:
+    properties:
+      amount:
+        type: number
+        description: entry amount
+      currency:
+        type: string
+        description: entry currency. three-letter ISO 4217 currency code, in uppercase.
+
+  order.private:
+    properties:
+      uuid:
+        type: string
+        description: order unique identifier
+      total_payment_amount:
+        type: number
+        description: payment amount
+      currency:
+        type: string
+        description: payment currency. three-letter ISO 4217 currency code, in uppercase.
+      project:
+        description: object contain main iformation about project
+        $ref: '#/definitions/order.project'
+      created_at:
+        description: object contain information about time when payment created
+        $ref: '#/definitions/ProtobufTimestamp'
+      transaction:
+        type: string
+        description: unique identifier for the transaction in payment system
+      transaction_date:
+        $ref: '#/definitions/ProtobufTimestamp'
+        description: object contain information about time when payment processed in payment system
+      payment_method:
+        $ref: '#/definitions/order.payment_method'
+        description: object contain information about payment method
+      country_code:
+        type: string
+        description: string representing the the user's country. two-letter uppercase country code in ISO 3166-1 alpha-2 format
+      merchant_id:
+        type: string
+        description: project merchant unique identifier
+      locale:
+        type: string
+        description: user's locale. two-letter code in lowercase
+      status:
+        type: string
+        description: "string representing the order current status. possible statuses: created - the order created but not processed yet; canceled - the order was canceled and money refunded to user; rejected - the order was rejected by payment system with any reasons; processed - the order was processed in payment system;"
+      user:
+        $ref: '#/definitions/order.user'
+        description: object contain information about user
+      billing_address:
+        $ref: '#/definitions/order.user.address'
+        description: object contain information about user address by payment form
+      type:
+        type: string
+        description: constant with object type
+      is_vat_deduction:
+        type: boolean
+        description: true is vat deduction
+      gross_revenue:
+        $ref: '#/definitions/order.money'
+        description: object contain information about gross revenue
+      tax_fee:
+        $ref: '#/definitions/order.money'
+        description: object contain information about tax fee
+      tax_fee_currency_exchange_fee:
+        $ref: '#/definitions/order.money'
+        description: object contain information about tax fee currency exchange fee
+      tax_fee_total:
+        $ref: '#/definitions/order.money'
+        description: object contain information about tax fee total
+      method_fee_total:
+        $ref: '#/definitions/order.money'
+        description: object contain information about method fee total
+      method_fee_tariff:
+        $ref: '#/definitions/order.money'
+        description: object contain information about method fee tariff
+      method_fixed_fee_tariff:
+        $ref: '#/definitions/order.money'
+        description: object contain information about method fixed fee tariff
+      paysuper_fixed_fee:
+        $ref: '#/definitions/order.money'
+        description: object contain information about paysuper fixed fee
+      fees_total:
+        $ref: '#/definitions/order.money'
+        description: object contain information about fees total
+      fees_total_local:
+        $ref: '#/definitions/order.money'
+        description: object contain information about fees total local
+      net_revenue:
+        $ref: '#/definitions/order.money'
+        description: object contain information about net revenue
+      refund_gross_revenue:
+        $ref: '#/definitions/order.money'
+        description: object contain information about refund gross revenue
+      method_refund_fee_tariff:
+        $ref: '#/definitions/order.money'
+        description: object contain information about method refund fee tariff
+      merchant_refund_fixed_fee_tariff:
+        $ref: '#/definitions/order.money'
+        description: object contain information about merchant refund fixed fee tariff
+      refund_tax_fee:
+        $ref: '#/definitions/order.money'
+        description: object contain information about refund tax fee
+      refund_tax_fee_currency_exchange_fee:
+        $ref: '#/definitions/order.money'
+        description: object contain information about refund tax fee currency exchange fee
+      paysuper_refund_tax_fee_currency_exchange_fee:
+        $ref: '#/definitions/order.money'
+        description: object contain information about paysuper refund tax fee currency exchange fee
+      refund_reverse_revenue:
+        $ref: '#/definitions/order.money'
+        description: object contain information about refund reverse revenue
+      refund_fees_total:
+        $ref: '#/definitions/order.money'
+        description: object contain information about refund fees total
+      refund_fees_total_local:
+        $ref: '#/definitions/order.money'
+        description: object contain information about refund fees total local
+      payment_gross_revenue_local:
+        $ref: '#/definitions/order.money'
+        description: object contain information about payment gross revenue local
+      payment_gross_revenue_origin:
+        $ref: '#/definitions/order.money'
+        description: object contain information about payment gross revenue origin
+      payment_gross_revenue:
+        $ref: '#/definitions/order.money'
+        description: object contain information about payment gross revenue
+      payment_tax_fee:
+        $ref: '#/definitions/order.money'
+        description: object contain information about payment tax fee
+      payment_tax_fee_local:
+        $ref: '#/definitions/order.money'
+        description: object contain information about payment tax fee local
+      payment_tax_fee_origin:
+        $ref: '#/definitions/order.money'
+        description: object contain information about payment tax fee origin
+      payment_tax_fee_currency_exchange_fee:
+        $ref: '#/definitions/order.money'
+        description: object contain information about payment tax fee currency exchange fee
+      payment_tax_fee_total:
+        $ref: '#/definitions/order.money'
+        description: object contain information about payment tax fee total
+      payment_gross_revenue_fx:
+        $ref: '#/definitions/order.money'
+        description: object contain information about payment gross revenue fx
+      payment_gross_revenue_fx_tax_fee:
+        $ref: '#/definitions/order.money'
+        description: object contain information about payment gross revenue fx tax fee
+      payment_gross_revenue_fx_profit:
+        $ref: '#/definitions/order.money'
+        description: object contain information about payment gross revenue fx profit
+      paysuper_method_fee_tariff_self_cost:
+        $ref: '#/definitions/order.money'
+        description: object contain information about paysuper method fee tariff self cost
+      paysuper_method_fee_profit:
+        $ref: '#/definitions/order.money'
+        description: object contain information about paysuper method fee profit
+      paysuper_method_fixed_fee_tariff_fx_profit:
+        $ref: '#/definitions/order.money'
+        description: object contain information about paysuper method fixed fee tariff fx profit
+      paysuper_method_fixed_fee_tariff_self_cost:
+        $ref: '#/definitions/order.money'
+        description: object contain information about paysuper method fixed fee tariff self cost
+      paysuper_method_fixed_fee_tariff_total_profit:
+        $ref: '#/definitions/order.money'
+        description: object contain information about paysuper method fixed fee tariff total profit
+      paysuper_fixed_fee_fx_profit:
+        $ref: '#/definitions/order.money'
+        description: object contain information about paysuper fixed fee fx_profit
+      paysuper_method_total_profit:
+        $ref: '#/definitions/order.money'
+        description: object contain information about paysuper method total profit
+      paysuper_total_profit:
+        $ref: '#/definitions/order.money'
+        description: object contain information about paysuper_total_profit
+      payment_refund_gross_revenue_local:
+        $ref: '#/definitions/order.money'
+        description: object contain information about payment refund gross revenue_local
+      payment_refund_gross_revenue_origin:
+        $ref: '#/definitions/order.money'
+        description: object contain information about payment refund gross revenue_origin
+      payment_refund_gross_revenue:
+        $ref: '#/definitions/order.money'
+        description: object contain information about payment refund gross revenue
+      payment_refund_tax_fee:
+        $ref: '#/definitions/order.money'
+        description: object contain information about payment refund tax fee
+      payment_refund_tax_fee_local:
+        $ref: '#/definitions/order.money'
+        description: object contain information about payment refund tax fee_local
+      payment_refund_tax_fee_origin:
+        $ref: '#/definitions/order.money'
+        description: object contain information about payment refund tax fee_origin
+      payment_refund_fee_tariff:
+        $ref: '#/definitions/order.money'
+        description: object contain information about payment refund fee tariff
+      method_refund_fixed_fee_tariff:
+        $ref: '#/definitions/order.money'
+        description: object contain information about method refund fixed fee tariff
+      refund_gross_revenue_fx:
+        $ref: '#/definitions/order.money'
+        description: object contain information about refund gross revenue fx
+      paysuper_method_refund_fee_tariff_profit:
+        $ref: '#/definitions/order.money'
+        description: object contain information about paysuper method refund fee tariff profit
+      paysuper_method_refund_fixed_fee_tariff_self_cost:
+        $ref: '#/definitions/order.money'
+        description: object contain information about paysuper method refund fixed fee tariff self_cost
+      paysuper_method_refund_fixed_fee_tariff_profit:
+        $ref: '#/definitions/order.money'
+        description: object contain information about paysuper method refund fixed fee tariff profit
+      paysuper_refund_total_profit:
+        $ref: '#/definitions/order.money'
+        description: object contain information about paysuper refund total profit
+
+  order.list.private:
+    properties:
+      count:
+        description: total count of selected orders
+        type: integer
+      items:
+        description: array of selected orders
+        items:
+          $ref: '#/definitions/order.private'
+        type: array
+    type: object
+
+securityDefinitions:
+  BasicAuth:
+    type: basic
+
+paths:
+  /transactions:
+    get:
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      description: Get orders list
+      parameters:
+        - description: order unique identifier
+          in: query
+          name: id
+          type: string
+        - description: query array of list of projects to get orders filtered by they
+          in: query
+          name: project[]
+          type: string
+        - description: query array of list of payment methods to get orders filtered by they
+          in: query
+          name: payment_method[]
+          type: string
+        - description: query array of list of payer countries to get orders filtered by they
+          in: query
+          name: country[]
+          type: string
+        - description: query array of list of orders statuses to get orders filtered by they
+          in: query
+          name: status[]
+          type: integer
+        - description: payer account on the any side of payment process. for example
+            it may be account in project, account in payment system, payer email and
+            etc
+          in: query
+          name: account
+          type: string
+        - description: start date when payment was closed to get orders filtered by
+            they
+          in: query
+          name: pm_date_from
+          type: integer
+        - description: end date when payment was closed to get orders filtered by they
+          in: query
+          name: pm_date_to
+          type: integer
+        - description: start date when payment was created to get orders filtered by
+            they
+          in: query
+          name: project_date_from
+          type: integer
+        - description: end date when payment was closed in project to get orders filtered
+            by they
+          in: query
+          name: project_date_to
+          type: integer
+        - description: maximum number of returning orders. default value is 100
+          in: query
+          name: limit
+          type: integer
+        - description: offset from which you want to return the list of orders. default
+            value is 0
+          in: query
+          name: offset
+          type: integer
+        - description: query array of fields list for sorting
+          in: query
+          name: sort[]
+          type: string
+        - description: multiple field search string - order unique identifier, user external identifier,
+            project order identifier, project name, payment method name
+          in: query
+          name: quick_search
+          type: string
+        - description: query array of merchant identifier list
+          in: query
+          name: merchant
+          type: array
+          items:
+            type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/order.list.private'
+        "400":
+          description: Invalid request data
+          schema:
+            $ref: '#/definitions/model.Error'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/model.Error'
+        "403":
+          description: Access denied
+          schema:
+            $ref: '#/definitions/model.Error'
+        "500":
+          description: Object with error message
+          schema:
+            $ref: '#/definitions/model.Error'
+      summary: Get orders
+      tags:
+        - Order
