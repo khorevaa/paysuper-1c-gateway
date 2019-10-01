@@ -18,7 +18,7 @@ import (
 )
 
 const (
-	LimitDefault  = 100
+	LimitDefault  = 1000
 	OffsetDefault = 0
 )
 
@@ -65,7 +65,7 @@ func (s *Service) listOrdersPublic(ctx echo.Context) error {
 		return echo.NewHTTPError(http.StatusBadRequest, errorRequestParamsIncorrect)
 	}
 
-	if req.Limit <= 0 {
+	if req.Limit <= 0 || req.Limit > LimitDefault {
 		req.Limit = LimitDefault
 	}
 
