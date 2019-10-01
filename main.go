@@ -2,8 +2,6 @@ package main
 
 import (
 	"github.com/kelseyhightower/envconfig"
-	_ "github.com/micro/go-plugins/broker/rabbitmq"
-	_ "github.com/micro/go-plugins/registry/kubernetes"
 	"github.com/paysuper/paysuper-1c-gateway/internal"
 	"go.uber.org/zap"
 )
