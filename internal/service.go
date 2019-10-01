@@ -6,6 +6,7 @@ import (
 	"github.com/InVisionApp/go-health"
 	"github.com/InVisionApp/go-health/handlers"
 	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo/v4/middleware"
 	"github.com/micro/go-micro"
 	"github.com/micro/go-plugins/client/selector/static"
 	"github.com/paysuper/paysuper-billing-server/pkg"
@@ -22,20 +23,25 @@ const (
 )
 
 type Service struct {
-	echoServer *echo.Echo
-	httpServer *http.Server
-	billing    grpc.BillingService
-	httpPort   int
-	metricPort int
+	echoServer   *echo.Echo
+	httpServer   *http.Server
+	billing      grpc.BillingService
+	httpPort     int
+	metricPort   int
+	authUser     string
+	authPassword string
 }
 
-func NewService(httpPort int, metricPort int) *Service {
-	return &Service{httpPort: httpPort, metricPort: metricPort}
+func NewService(httpPort int, metricPort int, user string, password string) *Service {
+	return &Service{httpPort: httpPort, metricPort: metricPort, authUser: user, authPassword: password}
 }
 
 func (s *Service) Run() {
 	s.echoServer = echo.New()
-	s.echoServer.GET("/", s.listOrdersPublic)
+	s.echoServer.Use(middleware.BasicAuth(func(username, password string, c echo.Context) (bool, error) {
+		return username == s.authUser && password == s.authPassword, nil
+	}))
+	s.echoServer.GET("/transactions", s.listOrdersPublic)
 
 	s.httpServer = s.initMetricsAndHealthCheck()
 

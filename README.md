@@ -15,3 +15,5 @@ Application designed to be launched with Kubernetes and handle part of configura
 |-------------------------------------|-------------------------------------------|
 | GW_SERVER_PORT                      | HTTP port for billing server REST gateway.|
 | GW_METRICS_PORT                     | HTTP port for metric and health check.    |
+| GW_BASIC_AUTH_USER                  | HTTP basic auth user.                     |
+| GW_BASIC_AUTH_PASS                  | HTTP basic auth password.                 |
