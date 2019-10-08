@@ -1,11 +1,11 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
-enableCertIssuer: false
+enableCertIssuer: true
 
 ingress:
-  hostname:
-  path:
+  hostname: 1sgw.tst.protocol.one
+  path: /
 
 certIssuer:
   email: admin@protocol.one
