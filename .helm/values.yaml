@@ -28,7 +28,11 @@ backend:
   - GW_METRICS_PORT
   - GW_BASIC_AUTH_USER
   - GW_BASIC_AUTH_PASS  
-  
+  - MICRO_SERVER_ADDRESS
+  - MICRO_REGISTRY
+  - MICRO_SELECTOR
+  - METRICS_PORT
+
 resources: {}
   # We usually recommend not to specify default resources and to leave this as a conscious
   # choice for the user. This also increases chances charts run on environments with little
