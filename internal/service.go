@@ -126,14 +126,16 @@ func (s *Service) createMicroOptions() []micro.Option {
 }
 
 func (s *Service) beforeRun() {
+	go func() {
+		zap.L().Info("Starting metrics and health check listening", zap.Int("port", s.metricPort))
+		if err := s.httpServer.ListenAndServe(); err != nil {
+			zap.L().Fatal("Metrics and health check listen failed", zap.Error(err))
+		}
+	}()
+
 	zap.L().Info("Starting server", zap.Int("port", s.httpPort))
 	if err := s.echoServer.Start(fmt.Sprintf(":%d", s.httpPort)); err != nil {
-		zap.L().Info("Starting API server failed", zap.Error(err))
-	}
-
-	zap.L().Info("Starting metrics and health check listening", zap.Int("port", s.metricPort))
-	if err := s.httpServer.ListenAndServe(); err != nil {
-		zap.L().Fatal("Metrics and health check listen failed", zap.Error(err))
+		zap.L().Fatal("Starting API server failed", zap.Error(err))
 	}
 }
 
