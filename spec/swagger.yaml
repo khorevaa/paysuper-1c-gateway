@@ -454,8 +454,7 @@ paths:
           in: query
           name: account
           type: string
-        - description: start date when payment was closed to get orders filtered by
-            they
+        - description: start date when payment was closed 
           in: query
           name: pm_date_from
           type: integer
@@ -463,13 +462,11 @@ paths:
           in: query
           name: pm_date_to
           type: integer
-        - description: start date when payment was closed
-            they
+        - description: start date when payment was closed in project 
           in: query
           name: project_date_from
           type: integer
-        - description: end date when payment was closed in project to get orders filtered
-            by they
+        - description: end date when payment was closed in project 
           in: query
           name: project_date_to
           type: integer
