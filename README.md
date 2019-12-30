@@ -2,7 +2,7 @@
 
 [![License: GPL 3.0](https://img.shields.io/badge/License-GPL3.0-green.svg)](https://opensource.org/licenses/Gpl3.0)
 [![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/paysuper/paysuper-1c-gateway/issues)
-[![Build Status](https://travis-ci.org/paysuper/paysuper-1c-gateway.svg?branch=master)](https://travis-ci.org/paysuper/paysuper-1c-gateway)
+[![Build Status](https://travis-ci.com/paysuper/paysuper-1c-gateway.svg?branch=develop)](https://travis-ci.com/paysuper/paysuper-1c-gateway)
 [![Go Report Card](https://goreportcard.com/badge/github.com/paysuper/paysuper-1c-gateway)](https://goreportcard.com/report/github.com/paysuper/paysuper-1c-gateway)
 
 PaySuper 1С Gateway is a simple REST API proxy to handle transaction log with a full set of data imported from PaySuper Billing Server to 1C server. 
