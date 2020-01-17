@@ -1,6 +1,6 @@
 module github.com/paysuper/paysuper-1c-gateway
 
-go 1.12
+go 1.13
 
 require (
 	github.com/InVisionApp/go-health v2.1.0+incompatible
@@ -17,4 +17,8 @@ require (
 	gopkg.in/go-playground/validator.v9 v9.29.1
 )
 
-replace github.com/hashicorp/consul => github.com/hashicorp/consul v1.5.1
+replace (
+	github.com/gogo/protobuf => github.com/gogo/protobuf v1.3.0
+	github.com/hashicorp/consul => github.com/hashicorp/consul v1.5.1
+	github.com/paysuper/paysuper-tax-service => github.com/paysuper/paysuper-tax-service v1.0.0
+)
