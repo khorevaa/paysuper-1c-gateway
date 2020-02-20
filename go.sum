@@ -806,6 +806,8 @@ github.com/paysuper/paysuper-i18n v0.0.0-20190926113224-7eaca4563c7b/go.mod h1:y
 github.com/paysuper/paysuper-proto v0.1.100 h1:7YTL1BA9LcktR5A/V7dhVOt1eJFowxRhbhsi6k3p4Xs=
 github.com/paysuper/paysuper-proto/go/billingpb v0.0.0-20200213094344-132dbbef912e h1:oi9Vsm8chf19SPRZTjIXLGe1R3kggc1l6ZP5S3+T/ZE=
 github.com/paysuper/paysuper-proto/go/billingpb v0.0.0-20200213094344-132dbbef912e/go.mod h1:25YtpqFQHFrt5xQAT76dduEcKblxoTEwge0czg/rq4Q=
+github.com/paysuper/paysuper-proto/go/billingpb v0.0.0-20200219140331-617b1ab12bff h1:WV9xgW/N/mWof0q3ErcpYe4Xwvnf7G7300Puwrs6vBE=
+github.com/paysuper/paysuper-proto/go/billingpb v0.0.0-20200219140331-617b1ab12bff/go.mod h1:25YtpqFQHFrt5xQAT76dduEcKblxoTEwge0czg/rq4Q=
 github.com/paysuper/paysuper-proto/go/recurringpb v0.0.0-20200201160112-2ee519914bfd h1:+ZCr/hA95qE8RV9Gs5OvtxSX4fXx3J6anowJaVM8p+s=
 github.com/paysuper/paysuper-proto/go/recurringpb v0.0.0-20200201160112-2ee519914bfd/go.mod h1:k5rhou4lCJDF6NGBcQYiPqGSpfLNfSuDUEVShzF3ZcA=
 github.com/paysuper/paysuper-recurring-repository v1.0.123 h1:24cPUNrJTUXwFPI93fvqW30nA1omEwMxWY2YueiUnnc=

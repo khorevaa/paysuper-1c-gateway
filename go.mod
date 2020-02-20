@@ -11,7 +11,7 @@ require (
 	github.com/labstack/gommon v0.3.0 // indirect
 	github.com/micro/go-micro v1.18.0
 	github.com/micro/go-plugins/client/selector/static v0.0.0-20200119172437-4fe21aa238fd
-	github.com/paysuper/paysuper-proto/go/billingpb v0.0.0-20200213094344-132dbbef912e
+	github.com/paysuper/paysuper-proto/go/billingpb v0.0.0-20200219140331-617b1ab12bff
 	go.uber.org/zap v1.13.0
 	gopkg.in/go-playground/validator.v9 v9.30.0
 )
