@@ -86,10 +86,6 @@ func (s *Service) listOrders(ctx echo.Context) error {
 	}
 
 	rsp, err := s.billing.FindAllOrdersPrivate(ctx.Request().Context(), req)
-	zap.L().Info(
-		"debug_1c_api",
-		zap.Any("response", rsp.Item),
-	)
 
 	if err != nil {
 		zap.L().Error(
