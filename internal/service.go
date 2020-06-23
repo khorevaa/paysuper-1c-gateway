@@ -9,8 +9,7 @@ import (
 	"github.com/labstack/echo/v4/middleware"
 	"github.com/micro/go-micro"
 	"github.com/micro/go-plugins/client/selector/static"
-	"github.com/paysuper/paysuper-billing-server/pkg"
-	"github.com/paysuper/paysuper-billing-server/pkg/proto/grpc"
+	"github.com/paysuper/paysuper-proto/go/billingpb"
 	"go.uber.org/zap"
 	"gopkg.in/go-playground/validator.v9"
 	"net/http"
@@ -26,7 +25,7 @@ const (
 type Service struct {
 	echoServer   *echo.Echo
 	httpServer   *http.Server
-	billing      grpc.BillingService
+	billing      billingpb.BillingService
 	validator    *validator.Validate
 	httpPort     int
 	metricPort   int
@@ -59,14 +58,14 @@ func (s *Service) Run() {
 	clientService := micro.NewService(options...)
 	clientService.Init()
 
-	s.billing = grpc.NewBillingService(pkg.ServiceName, clientService.Client())
+	s.billing = billingpb.NewBillingService(billingpb.ServiceName, clientService.Client())
 	if err := clientService.Run(); err != nil {
 		zap.L().Fatal("Can`t run service", zap.Error(err))
 	}
 }
 
 func (s *Service) listOrders(ctx echo.Context) error {
-	req := &grpc.ListOrdersRequest{}
+	req := &billingpb.ListOrdersRequest{}
 	err := ctx.Bind(req)
 
 	if err != nil {
@@ -90,7 +89,7 @@ func (s *Service) listOrders(ctx echo.Context) error {
 
 	if err != nil {
 		zap.L().Error(
-			pkg.ErrorGrpcServiceCallFailed,
+			billingpb.ErrorGrpcServiceCallFailed,
 			zap.Error(err),
 			zap.Any("request", req),
 		)
@@ -98,7 +97,7 @@ func (s *Service) listOrders(ctx echo.Context) error {
 		return echo.NewHTTPError(http.StatusInternalServerError, errorUnknown)
 	}
 
-	if rsp.Status != pkg.ResponseStatusOk {
+	if rsp.Status != billingpb.ResponseStatusOk {
 		return echo.NewHTTPError(int(rsp.Status), rsp.Message)
 	}
 

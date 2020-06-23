@@ -1,20 +1,19 @@
 module github.com/paysuper/paysuper-1c-gateway
 
-go 1.12
+go 1.13
 
 require (
 	github.com/InVisionApp/go-health v2.1.0+incompatible
+	github.com/InVisionApp/go-logger v1.0.1 // indirect
 	github.com/go-playground/validator v9.30.0+incompatible // indirect
-	github.com/labstack/echo v3.3.10+incompatible // indirect
+	github.com/kelseyhightower/envconfig v1.4.0
 	github.com/labstack/echo/v4 v4.1.6
 	github.com/labstack/gommon v0.3.0 // indirect
-	github.com/micro/go-micro v1.10.0
-	github.com/micro/go-plugins v1.3.0
-	github.com/paysuper/paysuper-billing-server v0.0.0-20190930122133-08e4a0cd855b
-	go.uber.org/multierr v1.2.0 // indirect
-	go.uber.org/zap v1.10.0
-	golang.org/x/crypto v0.0.0-20190927123631-a832865fa7ad // indirect
-	gopkg.in/go-playground/validator.v9 v9.29.1
+	github.com/micro/go-micro v1.18.0
+	github.com/micro/go-plugins/client/selector/static v0.0.0-20200119172437-4fe21aa238fd
+	github.com/paysuper/paysuper-proto/go/billingpb v0.0.0-20200219140331-617b1ab12bff
+	go.uber.org/zap v1.13.0
+	gopkg.in/go-playground/validator.v9 v9.30.0
 )
 
-replace github.com/hashicorp/consul => github.com/hashicorp/consul v1.5.1
+replace github.com/gogo/protobuf => github.com/gogo/protobuf v1.3.0

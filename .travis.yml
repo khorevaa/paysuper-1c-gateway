@@ -1,7 +1,7 @@
 language: go
 sudo: required
 go:
-- 1.12.x
+- 1.13.x
 dist: trusty
 addons:
   sonarcloud:
@@ -9,7 +9,7 @@ addons:
 stages:
 - test
 - name: deploy
-  if: branch = master
+  if: branch = develop
 jobs:
   include:
   - stage: test
